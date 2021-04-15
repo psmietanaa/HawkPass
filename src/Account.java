@@ -9,9 +9,9 @@ import java.util.Scanner;
  * @see Account
  */
 class Record implements Comparable<Record> {
-    protected final String domain;
-    protected final String username;
-    protected final String password;
+    final String domain;
+    final String username;
+    final String password;
 
     public Record(String domain, String username, String password) {
         this.domain = domain;
@@ -87,7 +87,7 @@ public class Account {
      * Store a password for a domain and username.
      * The user has the option to use a random password generator.
      */
-    protected static void storePassword() throws Exception {
+    static void storePassword() throws Exception {
         Scanner sc = new Scanner(System.in);
         ArrayList<Record> records = readRecords();
 
@@ -125,7 +125,7 @@ public class Account {
      * Change a password for a domain and username.
      * The user has the option to use a random password generator.
      */
-    protected static void changePassword() throws Exception {
+    static void changePassword() throws Exception {
         Scanner sc = new Scanner(System.in);
         ArrayList<Record> records = readRecords();
         if (records.isEmpty()) {
@@ -172,7 +172,7 @@ public class Account {
     /**
      * Remove a password for a domain and username.
      */
-    protected static void removePassword() throws Exception {
+    static void removePassword() throws Exception {
         Scanner sc = new Scanner(System.in);
         ArrayList<Record> records = readRecords();
         if (records.isEmpty()) {
@@ -199,9 +199,26 @@ public class Account {
     }
 
     /**
+     * Print stored records.
+     */
+    static void printRecords() throws Exception {
+        ArrayList<Record> records = readRecords();
+        if (records.isEmpty()) {
+            Utilities.printColor("The password manager is empty!\n", "red");
+            return;
+        }
+
+        System.out.println("Stored records: ");
+        for (Record record : records) {
+            System.out.format("\tDomain: %s | Username: %s\n", record.domain, record.username);
+        }
+        System.out.println();
+    }
+
+    /**
      * Get a password for a domain and username.
      */
-    protected static void getPassword() throws Exception {
+    static void getPassword() throws Exception {
         Scanner sc = new Scanner(System.in);
         ArrayList<Record> records = readRecords();
         if (records.isEmpty()) {

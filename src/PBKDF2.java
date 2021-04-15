@@ -12,18 +12,18 @@ import java.security.spec.KeySpec;
  */
 public class PBKDF2 {
     // Length of the salt in bytes
-    protected static final int SALT_LENGTH = 64;
+    static final int SALT_LENGTH = 64;
 
     // Number of iterations in PBKDF2
-    protected static final int ITERATION_COUNT = 100000;
+    static final int ITERATION_COUNT = 100000;
 
     // Version of the PBKDF2 algorithm
-    protected static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA512";
+    static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA512";
 
     /**
      * Generate an encryption key based on a master password.
      */
-    protected static byte[] generateKeyFromPassword(byte[] salt, byte[] password) throws Exception {
+    static byte[] generateKeyFromPassword(byte[] salt, byte[] password) throws Exception {
         SecretKeyFactory factory = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
         KeySpec spec = new PBEKeySpec(new String(password).toCharArray(), salt, ITERATION_COUNT, AES.KEY_LENGTH);
         SecretKey key = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
@@ -33,7 +33,7 @@ public class PBKDF2 {
     /**
      * Generate a salt.
      */
-    protected static byte[] generateSalt() {
+    static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_LENGTH];
         random.nextBytes(salt);

@@ -8,15 +8,15 @@ import java.security.SecureRandom;
  */
 public class SHA {
     // Length of the salt in bytes
-    protected static final int SALT_LENGTH = 64;
+    static final int SALT_LENGTH = 64;
 
     // Version of the hashing algorithm
-    protected static final String SHA_ALGORITHM = "SHA3-512";
+    static final String SHA_ALGORITHM = "SHA3-512";
 
     /**
      * Generate a salted hash from a given input.
      */
-    protected static byte[] generateHash(byte[] salt, byte[] input) throws Exception {
+    static byte[] generateHash(byte[] salt, byte[] input) throws Exception {
         MessageDigest md = MessageDigest.getInstance(SHA_ALGORITHM);
         md.update(salt);
         byte[] hash = md.digest(input);
@@ -26,7 +26,7 @@ public class SHA {
     /**
      * Generate a salt.
      */
-    protected static byte[] generateSalt() {
+    static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_LENGTH];
         random.nextBytes(salt);

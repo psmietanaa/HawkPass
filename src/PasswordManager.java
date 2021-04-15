@@ -11,26 +11,26 @@ import java.util.Scanner;
  */
 public class PasswordManager {
     // File with stored passwords
-    protected static final File storedPasswordsFile = new File(
+    static final File storedPasswordsFile = new File(
             System.getProperty("user.dir") + "/stored_passwords"
     );
 
     // File with a master password
-    protected static final File masterPasswordFile = new File(
+    static final File masterPasswordFile = new File(
             System.getProperty("user.dir") + "/master_password"
     );
 
     // Salt that is used to derive a symmetric key
-    protected static byte[] encryptionSalt;
+    static byte[] encryptionSalt;
 
     // IV that is used in the encryption
-    protected static byte[] encryptionIv;
+    static byte[] encryptionIv;
 
     // Key that is used in the encryption
-    protected static byte[] encryptionKey;
+    static byte[] encryptionKey;
 
     // Salt that is used to derive a symmetric key
-    protected static byte[] hmacSalt;
+    static byte[] hmacSalt;
 
     // Key that is used in HMAC
     protected static byte[] hmacKey;
@@ -42,6 +42,7 @@ public class PasswordManager {
     private static void menu() throws Exception {
         String operations = "Available operations: \n"
                 + "i,integrity   Check integrity of the file with passwords.\n"
+                + "p,print       Print domains and usernames for all stored records.\n"
                 + "g,get         Get an existing password for a domain and username.\n"
                 + "s,store       Store a password for a domain and username.\n"
                 + "c,change      Change an existing password for a domain and username.\n"
@@ -64,6 +65,10 @@ public class PasswordManager {
                         Utilities.printColor("Integrity check failed. Exiting...", "red");
                         System.exit(0);
                     }
+                }
+                case "p", "print" -> {
+                    Account.printRecords();
+                    menu();
                 }
                 case "g", "get" -> {
                     Account.getPassword();

@@ -7,15 +7,15 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class HMAC {
     // Length of HMAC in bytes
-    protected static final int HMAC_LENGTH = 64;
+    static final int HMAC_LENGTH = 64;
 
     // Version of the HMAC algorithm
-    protected static final String HMAC_ALGORITHM = "HmacSHA512";
+    static final String HMAC_ALGORITHM = "HmacSHA512";
 
     /**
      * Generate HMAC from a key and given input.
      */
-    protected static byte[] generateHmac(byte[] key, byte[] input) throws Exception {
+    static byte[] generateHmac(byte[] key, byte[] input) throws Exception {
         Mac hmac = Mac.getInstance(HMAC_ALGORITHM);
         hmac.init(new SecretKeySpec(key, HMAC_ALGORITHM));
         return hmac.doFinal(input);

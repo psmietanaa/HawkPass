@@ -8,7 +8,7 @@ import java.util.List;
  * two lowercase characters, two uppercase characters, two digits, and two special characters.
  * Based on https://mkyong.com/java/java-password-generator-example
  */
-public final class GeneratePassword {
+public class GeneratePassword {
     // Allowed characters
     private static final String lowercase = "abcdefghijklmnopqrstuvwxyz";
     private static final String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -26,7 +26,7 @@ public final class GeneratePassword {
      * Generate a secure and unpredictable password. It consists of at least two lowercase
      * characters, two uppercase characters, two digits, and two special characters.
      */
-    protected static String generateRandomPassword() {
+    static String generateRandomPassword() {
         String password = generateRandomString(lowercase, 2) +
                 generateRandomString(uppercase, 2) +
                 generateRandomString(digits, 2) +
