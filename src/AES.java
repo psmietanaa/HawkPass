@@ -9,13 +9,10 @@ import java.security.SecureRandom;
  */
 public class AES {
     // Length of the IV in bytes
-    // AES has 128 block size
+    // AES has a 128 block size
     static final int IV_LENGTH = 16;
 
-    // Length of the key in bits
-    static final int KEY_LENGTH = 256;
-
-    // Version of the encryption algorithm
+    // Version of the AES algorithm
     static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     /**

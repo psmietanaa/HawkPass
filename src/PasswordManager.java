@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Main class used by the Password Manager.
+ * Main class used by the password manager.
  * @author Piotr Smietana
  * @version 04/09/2021
  */
@@ -142,8 +142,8 @@ public class PasswordManager {
         byte[] masterPassword = sc.next().getBytes();
 
         // Generate master password file
-        byte[] salt = SHA.generateSalt();
-        byte[] key = SHA.generateHash(salt, masterPassword);
+        byte[] salt = PBKDF2.generateSalt();
+        byte[] key = PBKDF2.generateHashFromPassword(salt, masterPassword);
         byte[] saltAndKey = Utilities.addBytes(salt, key);
         Utilities.writeBytesToFile(saltAndKey, masterPasswordFile);
 
@@ -224,13 +224,13 @@ public class PasswordManager {
         byte[] bytes = Utilities.readFileToBytes(masterPasswordFile);
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
 
-        byte[] salt = new byte[SHA.SALT_LENGTH];
+        byte[] salt = new byte[PBKDF2.SALT_LENGTH];
         buffer.get(salt);
 
         byte[] storedHashedPassword = new byte[buffer.remaining()];
         buffer.get(storedHashedPassword);
 
-        byte[] currentHash = SHA.generateHash(salt, enteredPassword);
+        byte[] currentHash = PBKDF2.generateHashFromPassword(salt, enteredPassword);
         return Arrays.equals(currentHash, storedHashedPassword);
     }
 

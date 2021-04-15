@@ -84,6 +84,55 @@ public class Account {
     }
 
     /**
+     * Print stored records.
+     */
+    static void printRecords() throws Exception {
+        ArrayList<Record> records = readRecords();
+        if (records.isEmpty()) {
+            Utilities.printColor("The password manager is empty!\n", "red");
+            return;
+        } else {
+            Collections.sort(records);
+        }
+
+        System.out.println("Stored records: ");
+        for (Record record : records) {
+            System.out.println("    Domain: " + record.domain + " | Username: " + record.username);
+        }
+        System.out.println();
+    }
+
+    /**
+     * Get a password for a domain and username.
+     */
+    static void getPassword() throws Exception {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Record> records = readRecords();
+        if (records.isEmpty()) {
+            Utilities.printColor("Cannot get a password because the password manager is empty!\n", "red");
+            return;
+        }
+
+        String domain = getValidInput(sc, "Enter domain name: ").toLowerCase();
+        if (!checkIfDomainExists(domain, records)) {
+            Utilities.printColor("Record doesn't exist with this domain!\n", "red");
+            return;
+        }
+
+        String username = getValidInput(sc, "Enter username: ");
+
+        if (checkIfRecordExists(domain, username, records)) {
+            for (Record record : records) {
+                if (domain.equals(record.domain) && username.equals(record.username)) {
+                    System.out.println("Stored password for this account is: " + record.password + "\n");
+                }
+            }
+        } else {
+            Utilities.printColor("Record doesn't exist with this domain and username!\n", "red");
+        }
+    }
+
+    /**
      * Store a password for a domain and username.
      * The user has the option to use a random password generator.
      */
@@ -115,7 +164,6 @@ public class Account {
 
             Record record = new Record(domain, username, password);
             records.add(record);
-            Collections.sort(records);
             saveRecords(records);
             Utilities.printColor("Record stored successfully!\n", "green");
         }
@@ -161,7 +209,6 @@ public class Account {
 
             Record record = new Record(domain, username, password);
             records.add(record);
-            Collections.sort(records);
             saveRecords(records);
             Utilities.printColor("Record changed successfully!\n", "green");
         } else {
@@ -190,56 +237,8 @@ public class Account {
 
         if (checkIfRecordExists(domain, username, records)) {
             records.removeIf(record -> record.domain.equals(domain) && record.username.equals(username));
-            Collections.sort(records);
             saveRecords(records);
             Utilities.printColor("Record deleted successfully!\n", "green");
-        } else {
-            Utilities.printColor("Record doesn't exist with this domain and username!\n", "red");
-        }
-    }
-
-    /**
-     * Print stored records.
-     */
-    static void printRecords() throws Exception {
-        ArrayList<Record> records = readRecords();
-        if (records.isEmpty()) {
-            Utilities.printColor("The password manager is empty!\n", "red");
-            return;
-        }
-
-        System.out.println("Stored records: ");
-        for (Record record : records) {
-            System.out.format("\tDomain: %s | Username: %s\n", record.domain, record.username);
-        }
-        System.out.println();
-    }
-
-    /**
-     * Get a password for a domain and username.
-     */
-    static void getPassword() throws Exception {
-        Scanner sc = new Scanner(System.in);
-        ArrayList<Record> records = readRecords();
-        if (records.isEmpty()) {
-            Utilities.printColor("Cannot get a password because the password manager is empty!\n", "red");
-            return;
-        }
-
-        String domain = getValidInput(sc, "Enter domain name: ").toLowerCase();
-        if (!checkIfDomainExists(domain, records)) {
-            Utilities.printColor("Record doesn't exist with this domain!\n", "red");
-            return;
-        }
-
-        String username = getValidInput(sc, "Enter username: ");
-
-        if (checkIfRecordExists(domain, username, records)) {
-            for (Record record : records) {
-                if (domain.equals(record.domain) && username.equals(record.username)) {
-                    System.out.println("Stored password for this account is: " + record.password + "\n");
-                }
-            }
         } else {
             Utilities.printColor("Record doesn't exist with this domain and username!\n", "red");
         }
