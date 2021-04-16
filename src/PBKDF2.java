@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 /**
  * This class is responsible generating an encryption key based on a master password.
  * It is also responsible for generating a hash of the master password.
- * PBKDF2 is designed to be computationally expensive in order to make brute-force attacks harder.
+ * PBKDF2 is designed to be computationally expensive to make brute-force attacks harder.
  * Based on https://howtodoinjava.com/java/java-security/aes-256-encryption-decryption
  * https://www.codeproject.com/Articles/704865/Salted-Password-Hashing-Doing-it-Right
  */

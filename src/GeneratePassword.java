@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * This class is responsible for generating a secure random password that consists of at least
  * two lowercase characters, two uppercase characters, two digits, and two special characters.
- * Based on https://mkyong.com/java/java-password-generator-example
  */
 public class GeneratePassword {
     // Allowed characters
