@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
+import java.util.Scanner;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -11,19 +12,9 @@ import org.fusesource.jansi.AnsiConsole;
  */
 public class Utilities {
     /**
-     * Convert a byte array to a hex string.
-     */
-    public static String bytesToHex(byte[] bytes) {
-        StringBuilder result = new StringBuilder();
-        for (byte b: bytes)
-            result.append(String.format("%02x", b));
-        return result.toString();
-    }
-
-    /**
      * Add multiple byte arrays together.
      */
-    public static byte[] addBytes(byte[]... bytes) {
+    static byte[] addBytes(byte[]... bytes) {
         int size = 0;
         for (byte[] b : bytes) {
             size += b.length;
@@ -40,7 +31,7 @@ public class Utilities {
     /**
      * Read a file to a byte array.
      */
-    public static byte[] readFileToBytes(File file) {
+    static byte[] readFileToBytes(File file) {
         int fileLength = (int) file.length();
         byte[] bytes = new byte[fileLength];
 
@@ -59,7 +50,7 @@ public class Utilities {
     /**
      * Write a byte array into a file.
      */
-    public static void writeBytesToFile(byte[] bytes, File file) {
+    static void writeBytesToFile(byte[] bytes, File file) {
         try {
             FileOutputStream writer = new FileOutputStream(file);
             writer.write(bytes);
@@ -72,10 +63,57 @@ public class Utilities {
     }
 
     /**
+     * Get a valid input from the user
+     */
+    static String getValidInput(Scanner sc, String question) {
+        System.out.print(question);
+        String input = sc.next();
+        while (!checkInputConstraints(input)) {
+            System.out.print(question);
+            input = sc.next();
+        }
+        return input;
+    }
+
+    /**
+     * Check input constraints
+     */
+    static boolean checkInputConstraints(String input) {
+        int minimumLength = 4;
+        int maximumLength = 80;
+        if (input.length() < minimumLength) {
+            System.out.println("Input must be at least " + minimumLength + " characters long!");
+            return false;
+        } else if (input.length() > maximumLength) {
+            System.out.println("Input must be less than " + maximumLength + " characters long!");
+            return false;
+        }
+        return true;
+    }
+
+    static String manualOrRandomPasswordFeature(Scanner sc) {
+        System.out.print("Would you like to use a random password generator (Y/N)? ");
+        String answer = sc.next().toLowerCase();
+        while (!(answer.equals("y") || answer.equals("yes") || answer.equals("n") || answer.equals("no"))) {
+            System.out.print("Wrong answer. Please enter (Y/N): ");
+            answer = sc.next().toLowerCase();
+        }
+
+        String password;
+        if (answer.equals("y") || answer.equals("yes")) {
+            password = GeneratePassword.generateRandomPassword();
+            System.out.println("Your randomly generated password is: " + password);
+        } else {
+            password = getValidInput(sc, "Enter your password: ");
+        }
+        return password;
+    }
+
+    /**
      * Print input in color using Jansi library
      * Color can be black, red, green, yellow, blue, magenta, cyan, or white.
      */
-    public static void printColor(String input, String colorName) {
+    static void printColor(String input, String colorName) {
         try {
             AnsiConsole.systemInstall();
             Ansi.Color color = Ansi.Color.valueOf(colorName.toUpperCase());

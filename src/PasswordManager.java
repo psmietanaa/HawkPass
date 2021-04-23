@@ -137,9 +137,8 @@ public class PasswordManager {
 
         // Get master password
         Scanner sc = new Scanner(System.in);
-        System.out.println("This is your first time using the password manager.");
-        System.out.print("Create your master password: ");
-        byte[] masterPassword = sc.next().getBytes();
+        System.out.println("This is your first time using the password manager. You must create a master password.");
+        byte[] masterPassword = Utilities.manualOrRandomPasswordFeature(sc).getBytes();
 
         // Generate master password file
         byte[] salt = PBKDF2.generateSalt();
@@ -157,10 +156,8 @@ public class PasswordManager {
 
         byte[] encryptedData = AES.encrypt(encryptionIv, encryptionKey, new byte[0]);
         encryptedData = Utilities.addBytes(encryptionSalt, encryptionIv, encryptedData);
-
         byte[] hmac = HMAC.generateHmac(hmacKey, encryptedData);
         encryptedData = Utilities.addBytes(hmacSalt, hmac, encryptedData);
-
         Utilities.writeBytesToFile(encryptedData, storedPasswordsFile);
 
         Utilities.printColor("Master password created successfully!\n", "green");
@@ -175,6 +172,7 @@ public class PasswordManager {
         while (totalAttempts > 0) {
             System.out.print("Enter your master password: ");
             byte[] masterPassword = sc.next().getBytes();
+
             // If master password is correct
             if (checkPassword(masterPassword)) {
                 // Extract salts, IVs, and encrypted data

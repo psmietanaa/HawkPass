@@ -25,6 +25,20 @@ class Record implements Comparable<Record> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Record record = (Record) o;
+        return domain.equals(record.domain) &&
+                username.equals(record.username) &&
+                password.equals(record.password);
+    }
+
+    @Override
     public int compareTo(Record r) {
         return this.domain.compareTo(r.domain);
     }
@@ -56,6 +70,7 @@ public class Account {
             Record record = new Record(fields[0], fields[1], fields[2]);
             records.add(record);
         }
+
         return records;
     }
 
@@ -76,7 +91,6 @@ public class Account {
         // Generate stored passwords file
         byte[] encryptedData = AES.encrypt(PasswordManager.encryptionIv, PasswordManager.encryptionKey, data);
         encryptedData = Utilities.addBytes(PasswordManager.encryptionSalt, PasswordManager.encryptionIv, encryptedData);
-
         byte[] hmac = HMAC.generateHmac(PasswordManager.hmacKey, encryptedData);
         encryptedData = Utilities.addBytes(PasswordManager.hmacSalt, hmac, encryptedData);
 
@@ -113,18 +127,19 @@ public class Account {
             return;
         }
 
-        String domain = getValidInput(sc, "Enter domain name: ").toLowerCase();
+        String domain = Utilities.getValidInput(sc, "Enter domain name: ").toLowerCase();
         if (!checkIfDomainExists(domain, records)) {
             Utilities.printColor("Record doesn't exist with this domain!\n", "red");
             return;
         }
 
-        String username = getValidInput(sc, "Enter username: ");
+        String username = Utilities.getValidInput(sc, "Enter username: ");
 
         if (checkIfRecordExists(domain, username, records)) {
             for (Record record : records) {
                 if (domain.equals(record.domain) && username.equals(record.username)) {
                     System.out.println("Stored password for this account is: " + record.password + "\n");
+                    break;
                 }
             }
         } else {
@@ -140,27 +155,14 @@ public class Account {
         Scanner sc = new Scanner(System.in);
         ArrayList<Record> records = readRecords();
 
-        String domain = getValidInput(sc, "Enter domain name: ").toLowerCase();
+        String domain = Utilities.getValidInput(sc, "Enter domain name: ").toLowerCase();
 
-        String username = getValidInput(sc, "Enter username: ");
+        String username = Utilities.getValidInput(sc, "Enter username: ");
 
         if (checkIfRecordExists(domain, username, records)) {
             Utilities.printColor("Record already exists with this domain and username!\n", "red");
         } else {
-            System.out.print("Would you like to use a random password generator (Y/N)? ");
-            String answer = sc.next().toLowerCase();
-            while (!(answer.equals("y") || answer.equals("yes") || answer.equals("n") || answer.equals("no"))) {
-                System.out.print("Wrong answer. Please enter (Y/N): ");
-                answer = sc.next().toLowerCase();
-            }
-
-            String password;
-            if (answer.equals("y") || answer.equals("yes")) {
-                password = GeneratePassword.generateRandomPassword();
-                System.out.println("Your randomly generated password is: " + password);
-            } else {
-                password = getValidInput(sc, "Enter your password: ");
-            }
+            String password = Utilities.manualOrRandomPasswordFeature(sc);
 
             Record record = new Record(domain, username, password);
             records.add(record);
@@ -181,31 +183,18 @@ public class Account {
             return;
         }
 
-        String domain = getValidInput(sc, "Enter domain name: ").toLowerCase();
+        String domain = Utilities.getValidInput(sc, "Enter domain name: ").toLowerCase();
         if (!checkIfDomainExists(domain, records)) {
             Utilities.printColor("Record doesn't exist with this domain!\n", "red");
             return;
         }
 
-        String username = getValidInput(sc, "Enter username: ");
+        String username = Utilities.getValidInput(sc, "Enter username: ");
 
         if (checkIfRecordExists(domain, username, records)) {
             records.removeIf(record -> record.domain.equals(domain) && record.username.equals(username));
 
-            System.out.print("Would you like to use a random password generator (Y/N)? ");
-            String answer = sc.next().toLowerCase();
-            while (!(answer.equals("y") || answer.equals("yes") || answer.equals("n") || answer.equals("no"))) {
-                System.out.print("Wrong answer. Please enter (Y/N): ");
-                answer = sc.next().toLowerCase();
-            }
-
-            String password;
-            if (answer.equals("y") || answer.equals("yes")) {
-                password = GeneratePassword.generateRandomPassword();
-                System.out.println("Your randomly generated password is: " + password);
-            } else {
-                password = getValidInput(sc, "Enter your password: ");
-            }
+            String password = Utilities.manualOrRandomPasswordFeature(sc);
 
             Record record = new Record(domain, username, password);
             records.add(record);
@@ -227,13 +216,13 @@ public class Account {
             return;
         }
 
-        String domain = getValidInput(sc, "Enter domain name: ").toLowerCase();
+        String domain = Utilities.getValidInput(sc, "Enter domain name: ").toLowerCase();
         if (!checkIfDomainExists(domain, records)) {
             Utilities.printColor("Record doesn't exist with this domain!\n", "red");
             return;
         }
 
-        String username = getValidInput(sc, "Enter username: ");
+        String username = Utilities.getValidInput(sc, "Enter username: ");
 
         if (checkIfRecordExists(domain, username, records)) {
             records.removeIf(record -> record.domain.equals(domain) && record.username.equals(username));
@@ -242,31 +231,6 @@ public class Account {
         } else {
             Utilities.printColor("Record doesn't exist with this domain and username!\n", "red");
         }
-    }
-
-    // Get a valid input from the user
-    private static String getValidInput(Scanner sc, String question) {
-        System.out.print(question);
-        String input = sc.next();
-        while (!checkInputConstraints(input)) {
-            System.out.print(question);
-            input = sc.next();
-        }
-        return input;
-    }
-
-    // Check input constraints
-    private static boolean checkInputConstraints(String input) {
-        int minimumLength = 4;
-        int maximumLength = 80;
-        if (input.length() < minimumLength) {
-            System.out.println("Input must be at least " + minimumLength + " characters long!");
-            return false;
-        } else if (input.length() > maximumLength) {
-            System.out.println("Input must be less than " + maximumLength + " characters long!");
-            return false;
-        }
-        return true;
     }
 
     // Check if a password already exists for a specific domain
