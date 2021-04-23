@@ -118,7 +118,7 @@ public class PasswordManager {
                 }
             }
         } catch (Exception e) {
-            System.err.println(e.toString());
+            System.err.println("Exiting...");
             System.exit(1);
         }
     }

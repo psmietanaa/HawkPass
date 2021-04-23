@@ -92,10 +92,10 @@ public class Utilities {
     }
 
     static String manualOrRandomPasswordFeature(Scanner sc) {
-        System.out.print("Would you like to use a random password generator (Y/N)? ");
+        System.out.print("Would you like to use a random password generator (y/n)? ");
         String answer = sc.next().toLowerCase();
         while (!(answer.equals("y") || answer.equals("yes") || answer.equals("n") || answer.equals("no"))) {
-            System.out.print("Wrong answer. Please enter (Y/N): ");
+            System.out.print("Wrong answer. Please enter (y/n): ");
             answer = sc.next().toLowerCase();
         }
 
