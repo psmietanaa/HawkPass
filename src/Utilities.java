@@ -91,18 +91,21 @@ public class Utilities {
         return true;
     }
 
+    /**
+     * Feature that allows a user to enter their password or generate one
+     */
     static String manualOrRandomPasswordFeature(Scanner sc) {
-        System.out.print("Would you like to use a random password generator (y/n)? ");
+        System.out.print("Would you like to use a random password generator? (y/n) ");
         String answer = sc.next().toLowerCase();
         while (!(answer.equals("y") || answer.equals("yes") || answer.equals("n") || answer.equals("no"))) {
-            System.out.print("Wrong answer. Please enter (y/n): ");
+            System.out.print("Wrong answer. Please enter (y/n) ");
             answer = sc.next().toLowerCase();
         }
 
         String password;
         if (answer.equals("y") || answer.equals("yes")) {
             password = GeneratePassword.generateRandomPassword();
-            System.out.println("Your randomly generated password is: " + password);
+            printColor("Your randomly generated password is: " + password, "green");
         } else {
             password = getValidInput(sc, "Enter your password: ");
         }

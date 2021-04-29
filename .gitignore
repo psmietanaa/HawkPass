@@ -5,3 +5,7 @@ out
 
 # Jar
 META-INF
+
+# Passwords
+master_password
+stored_passwords

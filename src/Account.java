@@ -109,7 +109,7 @@ public class Account {
             Collections.sort(records);
         }
 
-        System.out.println("Stored records: ");
+        Utilities.printColor("Stored records: ", "green");
         for (Record record : records) {
             System.out.println("    Domain: " + record.domain + " | Username: " + record.username);
         }
@@ -138,7 +138,7 @@ public class Account {
         if (checkIfRecordExists(domain, username, records)) {
             for (Record record : records) {
                 if (domain.equals(record.domain) && username.equals(record.username)) {
-                    System.out.println("Stored password for this account is: " + record.password + "\n");
+                    Utilities.printColor("Stored password for this account is: " + record.password + "\n", "green");
                     break;
                 }
             }

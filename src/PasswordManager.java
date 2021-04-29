@@ -86,9 +86,12 @@ public class PasswordManager {
                     Account.removePassword();
                     menu();
                 }
-                case "h", "help" -> menu();
+                case "h", "help" -> {
+                    System.out.println();
+                    menu();
+                }
                 case "e", "exit" -> {
-                    System.out.println("Exiting...");
+                    Utilities.printColor("Exiting...", "green");
                     System.exit(0);
                 }
                 default -> {
